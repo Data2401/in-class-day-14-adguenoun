@@ -1,6 +1,6 @@
 ---
 title: "Join Lab"
-author: "Dr. Shoemaker"
+author: "Adam Guenoun"
 date: "DATA 2401"
 output: html_document
 ---
@@ -12,11 +12,13 @@ Load the `"nycflights13"` package.  You'll also need to load `dplyr` or `tidyver
 
 ```{r}
 library(tidyverse)
-#install.packages("nycflights13")
+# install.packages("nycflights13")
 library(nycflights13)
 my_flights <- flights # store my own version
 my_flights <- na.omit(my_flights) ## this dataset has data on cancelled flights too, 
                                   ## so we 'll remove those for now
+
+my_flights
 
 ```
 
@@ -24,6 +26,8 @@ my_flights <- na.omit(my_flights) ## this dataset has data on cancelled flights 
 Create a dataframe of the average arrival delays for each _destination_
 
 ```{r}
+avg_arrival_delay <- my_flights %>% group_by(dest) %>% summarise(avg_arrival_delay = mean(arr_delay))
+
 
 ```
 
@@ -31,6 +35,9 @@ Then use `left_join()` to join on the "airports" dataframe, which has the airpor
 
 ```{r}
 
+avg_arrival_delay <- left_join(avg_arrival_delay, airports, join_by(dest == faa))
+
+avg_arrival_delay
 ```
 
 
@@ -39,6 +46,8 @@ Note here: the column names don't match anymore!
 Which airport had the largest average arrival delay?
 
 ```{r}
+ avg_arrival_delay %>% slice_max(avg_arrival_delay, n = 10) %>% select(dest, avg_arrival_delay)
+
 
 ```
 
@@ -48,9 +57,11 @@ What is the average departure delay for each airline? To answer this with someth
 
 
 ```{r}
+airlines
+avg_arrival_delay
+full_join(avg_arrival_delay, airlines)
 
-
-````
+```
 
 Which airline had the smallest average departure delay? 
 

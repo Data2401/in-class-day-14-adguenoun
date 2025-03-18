@@ -1,6 +1,6 @@
 ---
 title: "Joins"
-author: "K. Shoemaker"
+author: "AGUENOUN"
 date: "DATA 2401"
 output:
   slidy_presentation: default
@@ -281,5 +281,12 @@ List all the visits and patient information, even if there isn't information for
 Show all visits with their assigned doctors.
 
 Find the doctor(s) that Bob has met with. 
+```{r}
+part_1 <- left_join(patients, visits) %>%  left_join(doctors)
+part_2 <- left_join(part_1, doctors)
 
+part_1
+part_2
+select(part_2, doctor_name, name, everything())
+```
 Find patients that haven't visited the hospital
